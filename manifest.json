@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Block Requests Extension",
+    "version": "1.0",
+    "author": "Gabriel García Pelluzzón",
+    "description": "Bloquea ciertas solicitudes hechas por una página.",
+    "permissions": [
+        "declarativeNetRequest",
+        "declarativeNetRequestWithHostAccess",
+        "storage",
+        "activeTab"
+    ],
+    "host_permissions": ["*://*/*"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
