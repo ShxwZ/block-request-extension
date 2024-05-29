@@ -1,0 +1,37 @@
+.main {
+    width: 350px;
+    padding: 24px;
+}
+.remove-icon {
+    cursor: pointer;
+    color: red;
+}
+.remove-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.blocked-url {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.blocked-url div {
+    margin-right: 20px;
+    text-decoration: none;
+    border-bottom: none !important;
+}
+
+.url-link {
+    max-width: 200px;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    overflow: hidden;
+}
+
+#blockedUrlsList {
+    list-style-type: none;
+    padding: 0;
+}

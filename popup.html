@@ -3,14 +3,18 @@
 <head>
   <title>Block Requests Extension</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pico-main/css/pico.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+<section class="main">
   <h1>Block Requests</h1>
   <form id="addUrlForm">
     <input type="text" id="urlInput" placeholder="Enter URL to block">
     <button type="submit">Add URL</button>
   </form>
   <ul id="blockedUrlsList"></ul>
+</section>
   <script src="popup.js"></script>
 </body>
 </html>
