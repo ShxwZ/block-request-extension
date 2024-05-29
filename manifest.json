@@ -2,8 +2,10 @@
     "manifest_version": 3,
     "name": "Block Requests Extension",
     "version": "1.0",
-    "author": "Gabriel García Pelluzzón",
-    "description": "Bloquea ciertas solicitudes hechas por una página.",
+    "author": {
+        "email": "gabriagp02@gmail.com"
+    },
+    "description": "Bloquea ciertas solicitudes hechas por una página. https://gabrielgarcia.vercel.app/",
     "permissions": [
         "declarativeNetRequest",
         "declarativeNetRequestWithHostAccess",

@@ -1,4 +1,4 @@
-// Este oyente recibe mensajes del popup y actualiza las reglas en consecuencia
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'updateRules') {
     const blockedUrls = message.rules.blockedUrls;
@@ -18,14 +18,14 @@ async function getExistingRules() {
     });
   });
 }
-// Esta función actualiza las reglas de bloqueo en la API declarativeNetRequest
+
 async function updateRules(blockedUrls) {
   if (!blockedUrls) {
     console.error('blockedUrls is undefined');
     return;
   }
   const rules = blockedUrls.map((url, index) => ({
-    id: index + 1, // Empezamos desde 1 y seguimos incrementando
+    id: index + 1,
     priority: 1,
     action: {
       type: "block"
@@ -39,7 +39,7 @@ async function updateRules(blockedUrls) {
     const idToRemove = actualRules.filter(rule => !rules.includes(r => r.id === rule.id)).map(rule => rule.id)
     console.log("Removing rules:", idToRemove);
     chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: idToRemove, // Elimina todas las reglas existentes
+      removeRuleIds: idToRemove, 
       addRules: rules
     }, () => {
       if (chrome.runtime.lastError) {
