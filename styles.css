@@ -1,27 +1,28 @@
 .main {
-    width: 350px;
+    width: 380px;
+    height: 480px;
     padding: 24px;
+    border-radius: 200px;
 }
 .remove-icon {
     cursor: pointer;
     color: red;
 }
-.remove-button {
+.modify-icon {
+    cursor: pointer;
+    color: white;
+}
+
+.button {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.blocked-url {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-}
 
-.blocked-url div {
-    margin-right: 20px;
-    text-decoration: none;
-    border-bottom: none !important;
+.link-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 .url-link {
@@ -29,6 +30,47 @@
     text-overflow: ellipsis;
     text-wrap: nowrap;
     overflow: hidden;
+}
+
+.data-icon {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.active {
+    color: hsla(57, 96%, 54%, 0.898);
+}
+
+.blocked-url {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+.blocked-url div {
+    text-decoration: none;
+    border-bottom: none !important;
+}
+
+.actions-buttons {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+textarea {
+    height: 150px;
 }
 
 #blockedUrlsList {

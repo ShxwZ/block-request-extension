@@ -13,7 +13,36 @@
     <input type="text" id="urlInput" placeholder="Enter URL to block">
     <button type="submit">Add URL</button>
   </form>
+  <h4>Blocked urls:</h4>
   <ul id="blockedUrlsList"></ul>
+  <dialog id="dataDialog">
+    <article>
+      <header>
+        <button id="closeDialog" aria-label="Close" rel="prev"></button>
+        <p>
+          <strong>Options</strong>
+        </p>
+      </header>
+      <div class="dialog-container">
+        <span><b>URL</b></span>
+      <a id="urlData"></a>
+      
+      <span><b>Data mocked</b></span>
+      <label>
+        <input checked name="opt-in" id="fileOrUrlCheck" type="checkbox" role="switch" />
+        File - URL 
+      </label>
+      <input id="mockFileData" type="file"  accept=".json" placeholder=""/>
+      <textarea id="mockDataArea" placeholder="Mocked data"></textarea>
+      <input type="text" id="urlToRedirect" placeholder="http://...">
+      <label>
+        <input checked name="opt-in" id="isActiveData" type="checkbox" role="switch" />
+        Active
+      </label>
+      <button id="addMockedData">Save</button>
+      </div>
+    </article>
+  </dialog>
 </section>
   <script src="popup.js"></script>
 </body>

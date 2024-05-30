@@ -10,7 +10,9 @@
         "declarativeNetRequest",
         "declarativeNetRequestWithHostAccess",
         "storage",
-        "activeTab"
+        "activeTab",
+        "<all_urls>",
+        "file:///*"
     ],
     "host_permissions": ["*://*/*"],
     "background": {
@@ -18,5 +20,11 @@
     },
     "action": {
         "default_popup": "popup.html"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["/data_page.html", "/data_page.js"],
+            "matches": ["<all_urls>"]
+        }
+    ]
 }

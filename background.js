@@ -24,14 +24,20 @@ async function updateRules(blockedUrls) {
     console.error('blockedUrls is undefined');
     return;
   }
-  const rules = blockedUrls.map((url, index) => ({
+  console.log('AQUI:', blockedUrls);
+  const rules = blockedUrls.filter(bu => bu.active).map((bu, index) => ({
     id: index + 1,
     priority: 1,
-    action: {
+    action: bu.data ? {
+      type: "redirect",
+      redirect: {
+        url: bu.isUrl ? bu.data : `data:application/json;base64,${btoa(bu.data)}`
+      }
+    } : {
       type: "block"
     },
     condition: {
-      urlFilter: url
+      urlFilter: bu.url
     }
   }));
   await getExistingRules().then(actualRules => {
@@ -43,6 +49,7 @@ async function updateRules(blockedUrls) {
       addRules: rules
     }, () => {
       if (chrome.runtime.lastError) {
+        console.log(rules)
         console.error("Error updating rules:", chrome.runtime.lastError.message);
       } else {
         console.log("Rules updated successfully.");
@@ -55,13 +62,17 @@ async function updateRules(blockedUrls) {
   
 }
 
+
+
 chrome.runtime.onInstalled.addListener(async () => {
+
   const blockedUrls = await getBlockedUrls();
   await updateRules(blockedUrls);
 });
 
-// Esta función obtiene las URLs bloqueadas del almacenamiento local
+
 async function getBlockedUrls() {
   const result = await chrome.storage.local.get('blockedUrls');
-  return result.blockedUrls || [];
+  const urls = result.blockedUrls.filter(bu => bu.url !== undefined);
+  return urls || [];
 }
