@@ -10,9 +10,7 @@
         "declarativeNetRequest",
         "declarativeNetRequestWithHostAccess",
         "storage",
-        "activeTab",
-        "<all_urls>",
-        "file:///*"
+        "activeTab"
     ],
     "host_permissions": ["*://*/*"],
     "background": {
@@ -23,6 +21,7 @@
     },
     "web_accessible_resources": [
         {
+            "resources": [],
             "matches": ["<all_urls>"]
         }
     ]

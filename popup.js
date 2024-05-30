@@ -208,12 +208,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function getBlockedUrls() {
     const result = await chrome.storage.local.get('blockedUrls');
-    const urls = result.blockedUrls.filter(bu => bu.url !== undefined);
-    return urls || [];
+    const urls = result.blockedUrls ? result.blockedUrls.filter(bu => bu.url !== undefined) : [];
+    return urls;
   }
 
   async function removeUrlAndUpdateRules(index) {
-    let blockedUrls = await getBlockedUrls();
+    let blockedUrls = await getBlockedUrls() || [];
     if (index !== -1) {
       blockedUrls.splice(index, 1);
       await chrome.storage.local.set({ blockedUrls });

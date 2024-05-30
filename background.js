@@ -73,6 +73,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 async function getBlockedUrls() {
   const result = await chrome.storage.local.get('blockedUrls');
-  const urls = result.blockedUrls.filter(bu => bu.url !== undefined);
-  return urls || [];
+    const urls = result.blockedUrls ? result.blockedUrls.filter(bu => bu.url !== undefined) : [];
+    return urls;
 }
