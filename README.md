@@ -1,6 +1,6 @@
 # RequestGuard
 
-This Google Chrome extension provides functionality to block and redirect configurable web requests. It allows users to either upload a custom JSON file or specify an external URL for redirection.
+This extension provides functionality to block and redirect configurable web requests. It allows users to either upload a custom JSON file or specify an external URL for redirection.
 
 ## Installation
 
