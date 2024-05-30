@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Block Requests Extension",
+    "name": "RequestGuard",
     "version": "1.0",
     "author": {
         "email": "gabriagp02@gmail.com"
@@ -23,7 +23,6 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["/data_page.html", "/data_page.js"],
             "matches": ["<all_urls>"]
         }
     ]
