@@ -103,108 +103,146 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadBlockedUrls();
 
 
-  async function loadBlockedUrls() {
+async function loadBlockedUrls() {
     blockedUrlsList.innerHTML = '';
     const blockedUrls = await getBlockedUrls();
     console.log('CARGANDO li Blocked urls:', blockedUrls);
     blockedUrls.forEach((bu, index) => {
-      const li = document.createElement('li');
-      li.classList.add('blocked-url');
-      
+        const li = createListItem(bu, index);
+        blockedUrlsList.appendChild(li);
+    });
+}
 
+function createListItem(bu, index) {
+    const li = document.createElement('li');
+    li.classList.add('blocked-url');
 
-      const link = document.createElement('a');
-      link.href = bu.url;
-      link.target = "_blank";
-      link.classList.add('url-link');
-      link.textContent = bu.url;
+    const linkContainer = createLinkContainer(bu);
+    const actions = createActions(bu, index);
 
-      const linkContainer = document.createElement('div');
-      linkContainer.classList.add('link-container');
+    li.appendChild(linkContainer);
+    li.appendChild(actions);
 
-      const statusIcon = document.createElement('i');
-      statusIcon.classList.add('fas', 'fa-lightbulb', 'status-icon');
+    return li;
+}
 
-      linkContainer.appendChild(statusIcon);
+function createLinkContainer(bu) {
+    const link = createLink(bu);
+    const statusIcon = createStatusIcon(bu);
+    const dataIcon = createDataIcon(bu);
 
-      if(bu.active){
+    const linkContainer = document.createElement('div');
+    linkContainer.classList.add('link-container');
+    linkContainer.appendChild(statusIcon);
+    linkContainer.appendChild(dataIcon);
+    linkContainer.appendChild(link);
+
+    return linkContainer;
+}
+
+function createLink(bu) {
+    const link = document.createElement('a');
+    link.href = bu.url;
+    link.target = "_blank";
+    link.classList.add('url-link');
+    link.textContent = bu.url;
+
+    return link;
+}
+
+function createStatusIcon(bu) {
+    const statusIcon = document.createElement('i');
+    statusIcon.classList.add('fas', 'fa-lightbulb', 'status-icon');
+
+    if(bu.active){
         statusIcon.classList.add('active');
-      }
+    }
 
-      
-      const dataIcon = document.createElement('i');
-        
-      dataIcon.classList.add('fas', 'fa-file-alt', 'data-icon');
-      if(bu.data) {
+    return statusIcon;
+}
+
+function createDataIcon(bu) {
+    const dataIcon = document.createElement('i');
+    dataIcon.classList.add('fas', 'fa-file-alt', 'data-icon');
+
+    if(bu.data) {
         dataIcon.classList.add('visible');
-      }
-      linkContainer.appendChild(dataIcon)
+    }
 
-      
-      linkContainer.appendChild(link);
+    return dataIcon;
+}
 
+function createActions(bu, index) {
+    const modifyButton = createModifyButton(bu, index);
+    const trashButton = createTrashButton(index);
 
-      const actions = document.createElement('div');
-      actions.classList.add('actions-buttons');
+    const actions = document.createElement('div');
+    actions.classList.add('actions-buttons');
+    actions.appendChild(modifyButton);
+    actions.appendChild(trashButton);
 
-      const modifyButton = document.createElement('div');
-      modifyButton.setAttribute('data-tooltip', 'Modify');
-      modifyButton.classList.add('button');
-      
-      const modifyIcon = document.createElement('i');
-      modifyIcon.classList.add('fas', 'fa-edit', 'modify-icon');
+    return actions;
+}
 
-      const trashButton = document.createElement('div');
-      trashButton.setAttribute('data-tooltip', 'Click to remove');
-      trashButton.classList.add('button');
-      const trashIcon = document.createElement('i');
-      trashIcon.classList.add('fas', 'fa-trash-alt', 'remove-icon');
-      
-                    
+function createModifyButton(bu, index) {
+    const modifyButton = document.createElement('div');
+    modifyButton.setAttribute('data-tooltip', 'Modify');
+    modifyButton.classList.add('button');
 
-      modifyButton.addEventListener('click', async () => {
-        dataDialog.setAttribute('data-index', index);
-        urlData.textContent = bu.url;
-        urlData.href = bu.url;
+    const modifyIcon = document.createElement('i');
+    modifyIcon.classList.add('fas', 'fa-edit', 'modify-icon');
 
-        isActiveData.checked = bu.active ?? false;
+    modifyButton.addEventListener('click', async () => {
+        await openDataDialog(bu, index);
+    });
 
+    modifyButton.appendChild(modifyIcon);
 
-        fileOrUrlCheck.checked = bu.isUrl ;
-        manageFileOrUrlCheck();
+    return modifyButton;
+}
 
-        if(bu.isUrl){
-          urlToRedirect.value = bu.data ?? '';
-          mockDataArea.value = '';
-        } else{
-          if(bu.data){
+function createTrashButton(index) {
+    const trashButton = document.createElement('div');
+    trashButton.setAttribute('data-tooltip', 'Click to remove');
+    trashButton.classList.add('button');
 
-            mockDataArea.value = bu.data;
-          } else {
-            mockDataArea.value = '';
-          }
-          urlToRedirect.value = '';
-        }
+    const trashIcon = document.createElement('i');
+    trashIcon.classList.add('fas', 'fa-trash-alt', 'remove-icon');
 
-        
-
-        dataDialog.setAttribute('open', true);
-      });
-      trashButton.addEventListener('click', async () => {
+    trashButton.addEventListener('click', async () => {
         await removeUrlAndUpdateRules(index);
         await loadBlockedUrls();
-      });
-      
-      modifyButton.appendChild(modifyIcon);
-      trashButton.appendChild(trashIcon);
-      actions.appendChild(modifyButton);
-      actions.appendChild(trashButton);
-      li.appendChild(linkContainer);
-      li.appendChild(actions);
-      blockedUrlsList.appendChild(li);
     });
-  }
-  
+
+    trashButton.appendChild(trashIcon);
+
+    return trashButton;
+}
+
+async function openDataDialog(bu, index) {
+    dataDialog.setAttribute('data-index', index);
+    urlData.textContent = bu.url;
+    urlData.href = bu.url;
+
+    isActiveData.checked = bu.active ?? false;
+
+    fileOrUrlCheck.checked = bu.isUrl ;
+    manageFileOrUrlCheck();
+
+    if(bu.isUrl){
+        urlToRedirect.value = bu.data ?? '';
+        mockDataArea.value = '';
+    } else{
+        if(bu.data){
+            mockDataArea.value = bu.data;
+        } else {
+            mockDataArea.value = '';
+        }
+        urlToRedirect.value = '';
+    }
+
+    dataDialog.setAttribute('open', true);
+}
 
   async function getBlockedUrls() {
     const result = await chrome.storage.local.get('blockedUrls');
