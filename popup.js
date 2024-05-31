@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlInput = document.getElementById('urlInput');
   const urlData = document.getElementById('urlData');
   const isActiveData = document.getElementById('isActiveData');
-  const fileOrUrlCheck = document.getElementById('fileOrUrlCheck');
+  const isUrlCheck = document.getElementById('isUrlCheck');
   const urlToRedirect = document.getElementById('urlToRedirect');
   const mockDataArea = document.getElementById('mockDataArea');
   const mockFileData = document.getElementById('mockFileData');
@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   });
 
+  urlData.addEventListener('input', async (e) => {
+    urlData.value === '' || !urlData.value ? addMockedDataButton.setAttribute('disabled', true) : addMockedDataButton.removeAttribute('disabled');
+
+  });
+
   mockFileData.addEventListener('change', function() {
     const file = this.files[0];
   
@@ -38,19 +43,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  fileOrUrlCheck.addEventListener('change', async (e) => {
-    manageFileOrUrlCheck();
+  isUrlCheck.addEventListener('change', async (e) => {
+    manageisUrlCheck();
   
   });
 
-  function manageFileOrUrlCheck(){
-    if(fileOrUrlCheck.checked){
-      fileOrUrlCheck.removeAttribute('checked');
+  function manageisUrlCheck(){
+    if(isUrlCheck.checked){
+      isUrlCheck.removeAttribute('checked');
       mockFileData.style.display = 'none';
       mockDataArea.style.display = 'none';
       urlToRedirect.style.display = 'block';
     } else {
-      fileOrUrlCheck.setAttribute('checked', true);
+      isUrlCheck.setAttribute('checked', true);
       urlToRedirect.style.display = 'none';
       mockDataArea.style.display = 'block';
       mockFileData.style.display = 'block';
@@ -65,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dataUrl = urlToRedirect.value;
 
     let finalData;
-    if(fileOrUrlCheck.checked){
+    if(isUrlCheck.checked){
       finalData = dataUrl;
       
     }else{
@@ -73,11 +78,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         finalData = dataFile;
       }
     }
-    console.log('FINAL Data:', finalData);
+
     let blockedUrls = await getBlockedUrls();
     const index = dataDialog.getAttribute('data-index');
 
-    blockedUrls[index] = { ...blockedUrls[index], data: finalData, active: isActiveData.checked, isUrl: fileOrUrlCheck.checked};
+    blockedUrls[index] = { 
+      url: urlData.value, 
+      data: finalData, 
+      active: isActiveData.checked, 
+      isUrl: isUrlCheck.checked
+    };
 
     await chrome.storage.local.set({ blockedUrls });
     await updateRules(blockedUrls);
@@ -106,7 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadBlockedUrls() {
     blockedUrlsList.innerHTML = '';
     const blockedUrls = await getBlockedUrls();
-    console.log('CARGANDO li Blocked urls:', blockedUrls);
     blockedUrls.forEach((bu, index) => {
         const li = createListItem(bu, index);
         blockedUrlsList.appendChild(li);
@@ -142,7 +151,7 @@ function createLinkContainer(bu) {
 
 function createLink(bu) {
     const link = document.createElement('a');
-    link.href = bu.url;
+    link.href = bu.url.includes('http') ? bu.url : `http://${bu.url}`;
     link.target = "_blank";
     link.classList.add('url-link');
     link.textContent = bu.url;
@@ -187,6 +196,7 @@ function createActions(bu, index) {
 function createModifyButton(bu, index) {
     const modifyButton = document.createElement('div');
     modifyButton.setAttribute('data-tooltip', 'Modify');
+    modifyButton.setAttribute('data-placement', 'left');
     modifyButton.classList.add('button');
 
     const modifyIcon = document.createElement('i');
@@ -204,6 +214,7 @@ function createModifyButton(bu, index) {
 function createTrashButton(index) {
     const trashButton = document.createElement('div');
     trashButton.setAttribute('data-tooltip', 'Click to remove');
+    trashButton.setAttribute('data-placement', 'left');
     trashButton.classList.add('button');
 
     const trashIcon = document.createElement('i');
@@ -221,13 +232,12 @@ function createTrashButton(index) {
 
 async function openDataDialog(bu, index) {
     dataDialog.setAttribute('data-index', index);
-    urlData.textContent = bu.url;
-    urlData.href = bu.url;
+    urlData.value = bu.url;
 
     isActiveData.checked = bu.active ?? false;
 
-    fileOrUrlCheck.checked = bu.isUrl ;
-    manageFileOrUrlCheck();
+    isUrlCheck.checked = bu.isUrl ;
+    manageisUrlCheck();
 
     if(bu.isUrl){
         urlToRedirect.value = bu.data ?? '';

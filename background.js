@@ -2,7 +2,6 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'updateRules') {
     const blockedUrls = message.rules.blockedUrls;
-    console.log('Updating rules:', blockedUrls)
     updateRules(blockedUrls);
     sendResponse({ success: true });
   }
@@ -24,7 +23,6 @@ async function updateRules(blockedUrls) {
     console.error('blockedUrls is undefined');
     return;
   }
-  console.log('AQUI:', blockedUrls);
   const rules = blockedUrls.filter(bu => bu.active).map((bu, index) => ({
     id: index + 1,
     priority: 1,
@@ -43,13 +41,11 @@ async function updateRules(blockedUrls) {
   await getExistingRules().then(actualRules => {
 
     const idToRemove = actualRules.filter(rule => !rules.includes(r => r.id === rule.id)).map(rule => rule.id)
-    console.log("Removing rules:", idToRemove);
     chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: idToRemove, 
       addRules: rules
     }, () => {
       if (chrome.runtime.lastError) {
-        console.log(rules)
         console.error("Error updating rules:", chrome.runtime.lastError.message);
       } else {
         console.log("Rules updated successfully.");

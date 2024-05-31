@@ -13,7 +13,7 @@
     <input type="text" id="urlInput" placeholder="Enter URL to block">
     <button type="submit">Add URL</button>
   </form>
-  <h4>Urls blocked:</h4>
+  <h4>Urls:</h4>
   <ul id="blockedUrlsList"></ul>
   <dialog id="dataDialog">
     <article>
@@ -25,11 +25,11 @@
       </header>
       <div class="dialog-container">
         <span><b>URL</b></span>
-      <a id="urlData"></a>
+      <input id="urlData" placeholder="URL"/>
       
-      <span><b>Data mocked</b></span>
+      <span><b>Data mocked</b> <small>(empty = disabled)</small></span>
       <label>
-        <input checked name="opt-in" id="fileOrUrlCheck" type="checkbox" role="switch" />
+        <input checked name="opt-in" id="isUrlCheck" type="checkbox" role="switch" />
         File - URL 
       </label>
       <input id="mockFileData" type="file"  accept=".json" placeholder=""/>

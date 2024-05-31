@@ -26,7 +26,7 @@
 }
 
 .url-link {
-    max-width: 200px;
+    max-width: 220px;
     text-overflow: ellipsis;
     text-wrap: nowrap;
     overflow: hidden;
