@@ -9,8 +9,7 @@
     "permissions": [
         "declarativeNetRequest",
         "declarativeNetRequestWithHostAccess",
-        "storage",
-        "activeTab"
+        "storage"
     ],
     "host_permissions": ["*://*/*"],
     "background": {
